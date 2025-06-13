@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Birthday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Soft, elegant background with pastel gradient */
+        body {
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f9e1e6 0%, #f4c4f3 50%, #f0e6ff 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333333;
+        }
+
+        /* Hide carousel for no background images */
+        .carousel {
+            display: none;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2; /* Ensure content is above balloons */
+            padding: 30px;
+        }
+
+        /* Rotating Name Section with elegant font */
+        .area {
+            font-family: 'Sacramento', cursive;
+            font-size: 4rem;
+            font-weight: 400;
+            color: #d81b60;
+            animation: fade 2s ease-in-out infinite;
+            text-shadow: 0 0 8px rgba(216, 27, 96, 0.5);
+            text-align: center;
+            margin: 30px 0 50px 0;
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Typing animation with modern typography */
+        .typing h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 400;
+            text-align: center;
+            color: #4a2c40;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            margin: 15px 0;
+            z-index: 2;
+        }
+
+        #nae {
+            color: #c2185b;
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+        }
+
+        /* Birthday message with clean design */
+        .birthday-message {
+            color: #4a2c40;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 700px;
+        }
+
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .hidden-content.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Button with soft, rounded design */
+        #readMoreBtn {
+            background: linear-gradient(45deg, #f06292, #f48fb1);
+            color: white;
+            padding: 12px 35px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+            margin: 40px auto;
+        }
+
+        #readMoreBtn:hover {
+            background: linear-gradient(45deg, #d81b60, #f06292);
+            transform: translateY(-2px);
+        }
+
+        /* Banner image styling, no box or shadow */
+        .col-12.col-xl-6 img {
+            max-width: 80%;
+            border-radius: 15px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        /* Hide cake and balloon border */
+        .cake, .balloon-border {
+            display: none;
+        }
+
+        /* Hide audio controls */
+        .song {
+            display: none;
+        }
+
+        /* Loader button with consistent design */
+        .loader #play {
+            background: linear-gradient(45deg, #f06292, #f48fb1);
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .loader #play:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Subtle background animation for sparkle effect */
+        @keyframes sparkle {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 245, 247, 0.2), rgba(255, 235, 238, 0.3), rgba(255, 245, 247, 0.2));
+            background-size: 400%;
+            animation: sparkle 20s linear infinite;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Ensure typing section is not hidden */
+        .type-wrap {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+
+        /* Balloon animation */
+        .balloon-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Behind main content */
+            pointer-events: none; /* Prevent interaction with balloons */
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -100px; /* Start below the screen */
+            width: 60px;
+            height: 80px;
+            background-image: url('img/balloon.png');
+            background-size: cover;
+            opacity: 0.8;
+            animation: floatUp 6s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(20deg); /* Move up and slightly rotate */
+                opacity: 0;
+            }
+        }
+
+        /* Randomize balloon positions and delays */
+        .balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .balloon:nth-child(2) { left: 25%; animation-delay: 1s; }
+        .balloon:nth-child(3) { left: 40%; animation-delay: 0.5s; }
+        .balloon:nth-child(4) { left: 55%; animation-delay: 1.5s; }
+        .balloon:nth-child(5) { left: 70%; animation-delay: 0.8s; }
+        .balloon:nth-child(6) { left: 85%; animation-delay: 1.2s; }
+    </style>
+</head>
+<body>
+    <!-- Background Carousel (hidden but retained for compatibility) -->
+    <div id="backgroundCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="img/happy-birthday-images-wallpaper-preview.jpg" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img src="img/photo-1513151233558-d860c5398176.jpeg" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img src="img/360_F_587966589_OiUxd18RHKnYjcd4gLpZtPtZOse1Zee3.jpg" alt="Third slide">
+            </div>
+        </div>
+    </div>
+
+    <!-- Balloon Container -->
+    <div class="balloon-container">
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="loader">
+                    <button id="play">Start</button>
+                </div>
+            </div>
+        </div>
+        <audio class="song" loop>
+            <source src="music.mp3">
+            Your browser isn't invited for super fun audio time.
+        </audio>
+        <canvas id="confetti"></canvas>
+        <div class="main">
+            <div class="container pt-5">
+                <div class="row">
+                    <div class="col-12 col-xl-6 mx-auto">
+                        <img src="img/banner.png" alt="Banner">
+                    </div>
+
+                    <!-- Rotating Name Section -->
+                    <div class="col-12 text-center">
+                        <div id="name" class="area">IFRA 💕</div>
+                    </div>
+
+                    <!-- Typing Section -->
+                    <div class="col-12 text-center">
+                        <div class="type-wrap">
+                            <div id="typed-strings" class="typing">
+                                <h2>Happy Birthday <i id="nae">Ifra ♥</i></h2>
+                                <h2>Wishing uh a day as bright as ur smile</h2>
+                                <h2>Sending uh sunshine, smiles, and happy vibes</h2>
+                            </div>
+                            <span id="typed" style="white-space:pre;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center mt-4">
+                        <!-- Hidden Birthday Message -->
+                        <div id="birthdayMessage" class="hidden-content birthday-message">
+                            <p>
+                                Happy birthday to my beautiful Miss, ! 🎉🎂 Today marks a special day, not just because it's your birthday, but because it celebrates the incredible person you are 🙌. From our internship days to start our job together, we've shared an unforgettable journey 📚. I still remember when we first met, you were this strict, disciplined, and focused girl who always had her goals in sight 💪, but as time passed, I began to see the real you - your kindness, compassion, and generosity ❤. You've been my rock, my confidante, and my best friend 🤗.
+                            </p>
+                        </div>
+                        <!-- Read More Button -->
+                        <button id="readMoreBtn" class="btn btn-primary">Read More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/typed.min.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+        // Array of names
+        const names = ["I f r a 💕", "M i s s  💕", "C u t i e 💕", " 💕", "G a n d i    b a c h i 💕"];
+        let currentIndex = 0;
+
+        // Function to update the name
+        function updateName() {
+            const nameElement = document.getElementById("name");
+            currentIndex = (currentIndex + 1) % names.length; // Cycle through names
+            nameElement.textContent = names[currentIndex];
+        }
+
+        // Change name every 3 seconds
+        setInterval(updateName, 2000);
+
+        // Read More button functionality
+        const readMoreBtn = document.getElementById("readMoreBtn");
+        const birthdayMessage = document.getElementById("birthdayMessage");
+
+        readMoreBtn.addEventListener("click", () => {
+            if (birthdayMessage.classList.contains("visible")) {
+                birthdayMessage.classList.remove("visible");
+                readMoreBtn.textContent = "Read More";
+            } else {
+                birthdayMessage.classList.add("visible");
+                readMoreBtn.textContent = "Read Less";
+            }
+        });
+
+        // Stop balloon animation after 10 seconds
+        setTimeout(() => {
+            const balloons = document.querySelectorAll('.balloon');
+            balloons.forEach(balloon => balloon.remove());
+        }, 10000);
+    </script>
+</body>
+</html>
